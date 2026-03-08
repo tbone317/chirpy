@@ -1,0 +1,32 @@
+@hostname = http://localhost:8080
+###
+post {{hostname}}/api/validate_chirp
+Content-Type: application/json
+
+{
+  "body": "Hello, Chirpy! keRfuffle sharbert fornax"
+}
+
+###
+post {{hostname}}/api/validate_chirp
+Content-Type: application/json
+
+{
+  "body": "Hello, world! This is a longer chirp that should be valid as well. We need to have more than 140 characters of text to make this fail. I think this is more than 140 characters."
+}
+
+###
+get {{hostname}}/app
+
+###
+get {{hostname}}/api/healthz
+
+###
+post {{hostname}}/api/healthz
+
+###
+get {{hostname}}/admin/metrics
+
+###
+post {{hostname}}/admin/reset
+
