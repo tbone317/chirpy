@@ -1,5 +1,14 @@
 @hostname = http://localhost:8080
-###
+
+### Test add user
+post {{hostname}}/api/users
+Content-Type: application/json
+
+{
+  "email": "travis.dunbar@testing.com"
+}
+
+### Validate a chirp
 post {{hostname}}/api/validate_chirp
 Content-Type: application/json
 
@@ -7,7 +16,7 @@ Content-Type: application/json
   "body": "Hello, Chirpy! keRfuffle sharbert fornax"
 }
 
-###
+### Validate a chirp that is too long
 post {{hostname}}/api/validate_chirp
 Content-Type: application/json
 
@@ -15,18 +24,18 @@ Content-Type: application/json
   "body": "Hello, world! This is a longer chirp that should be valid as well. We need to have more than 140 characters of text to make this fail. I think this is more than 140 characters."
 }
 
-###
+### Ping the frontend
 get {{hostname}}/app
 
-###
+### Ping the healthz endpoint
 get {{hostname}}/api/healthz
 
-###
+### Ping the healthz endpoint with POST (should NOT work)
 post {{hostname}}/api/healthz
 
-###
+### Get metrics
 get {{hostname}}/admin/metrics
 
-###
+### Reset hits (should be forbidden in non-dev environment)
 post {{hostname}}/admin/reset
 
