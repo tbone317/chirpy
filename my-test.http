@@ -9,19 +9,21 @@ Content-Type: application/json
 }
 
 ### Validate a chirp
-post {{hostname}}/api/validate_chirp
+post {{hostname}}/api/chirps
 Content-Type: application/json
 
 {
-  "body": "Hello, Chirpy! keRfuffle sharbert fornax"
+  "body": "Hello, Chirpy! keRfuffle sharbert fornax",
+  "user_id": "4796526c-c61b-415f-83a4-a5d06feaa65b"
 }
 
 ### Validate a chirp that is too long
-post {{hostname}}/api/validate_chirp
+post {{hostname}}/api/chirps
 Content-Type: application/json
 
 {
-  "body": "Hello, world! This is a longer chirp that should be valid as well. We need to have more than 140 characters of text to make this fail. I think this is more than 140 characters."
+  "body": "Hello, world! This is a longer chirp that should be valid as well. We need to have more than 140 characters of text to make this fail. I think this is more than 140 characters.",
+  "user_id": "b116dc2e-5b28-4096-bbfc-a2b9d82e04d6"
 }
 
 ### Ping the frontend
