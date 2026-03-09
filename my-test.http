@@ -1,5 +1,8 @@
 @hostname = http://localhost:8080
 
+### Get a single chirp by ID
+get {{hostname}}/api/chirps/7f042df3-8f5a-48fb-9e8c-0b71ba8e3474
+
 ### Get all chirps
 get {{hostname}}/api/chirps
 
