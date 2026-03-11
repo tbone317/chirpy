@@ -25,6 +25,7 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Email     string    `json:"email"`
+	Password  string    `json:"-"`
 }
 
 func main() {
@@ -68,7 +69,7 @@ func main() {
 
 	mux.HandleFunc("POST /admin/reset", cfg.handlerReset)
 	mux.HandleFunc("POST /api/users", cfg.handlerCreateUser)
-
+	mux.HandleFunc("POST /api/login", cfg.handlerLogin)
 	server := &http.Server{
 		Addr:    ":" + port,
 		Handler: mux,

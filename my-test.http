@@ -6,12 +6,22 @@ get {{hostname}}/api/chirps/7f042df3-8f5a-48fb-9e8c-0b71ba8e3474
 ### Get all chirps
 get {{hostname}}/api/chirps
 
+### Login with valid credentials
+post {{hostname}}/api/login
+Content-Type: application/json  
+
+{
+  "email": "travis.dunbar@gmail.com",
+  "password": "password123"
+}
+
 ### Test add user
 post {{hostname}}/api/users
 Content-Type: application/json
 
 {
-  "email": "travis.dunbar@testing.com"
+  "email": "travis.dunbar@gmail.com",
+  "password": "password123"
 }
 
 ### Validate a chirp
@@ -20,7 +30,7 @@ Content-Type: application/json
 
 {
   "body": "Hello, Chirpy! keRfuffle sharbert fornax",
-  "user_id": "0d7e2724-10e7-4db9-af45-017bae7aef82"
+  "user_id": "443a75c2-95f2-4672-83bc-cfd1f27449a9"
 }
 
 ### Validate a chirp that is too long
