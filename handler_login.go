@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/tbone317/chirpy/internal/auth"
+	"github.com/tbone317/chirpy/internal/database"
 )
 
 func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
@@ -14,6 +16,8 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	type response struct {
 		User
+		Token        string `json:"token"`
+		RefreshToken string `json:"refresh_token"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -36,6 +40,25 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	accessToken, err := auth.MakeJWT(
+		user.ID,
+		cfg.secretKey,
+		time.Hour,
+	)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Couldn't create access token", err)
+		return
+	}
+	refreshToken := auth.MakeRefreshToken()
+	_, err = cfg.db.CreateRefreshToken(r.Context(), database.CreateRefreshTokenParams{
+		UserID:    user.ID,
+		Token:     refreshToken,
+		ExpiresAt: time.Now().UTC().Add(time.Hour * 24 * 60),
+	})
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Couldn't create refresh token", err)
+		return
+	}
 	respondWithJSON(w, http.StatusOK, response{
 		User: User{
 			ID:        user.ID,
@@ -43,5 +66,7 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		},
+		Token:        accessToken,
+		RefreshToken: refreshToken,
 	})
 }

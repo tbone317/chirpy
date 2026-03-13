@@ -18,6 +18,7 @@ type apiConfig struct {
 	fileserverHits atomic.Int64
 	db             *database.Queries
 	platform       string
+	secretKey      string
 }
 
 type User struct {
@@ -44,6 +45,10 @@ func main() {
 	if dbURL == "" {
 		log.Fatal("DB_URL environment variable is not set")
 	}
+	secretKey := os.Getenv("SECRET_KEY")
+	if secretKey == "" {
+		log.Fatal("SECRET_KEY environment variable is not set")
+	}
 	// log.Printf("Using DB_URL: %s", dbURL)
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -55,6 +60,7 @@ func main() {
 		fileserverHits: atomic.Int64{},
 		db:             database.New(dbConn),
 		platform:       platform,
+		secretKey:      secretKey,
 	}
 
 	mux := http.NewServeMux()
@@ -70,6 +76,8 @@ func main() {
 	mux.HandleFunc("POST /admin/reset", cfg.handlerReset)
 	mux.HandleFunc("POST /api/users", cfg.handlerCreateUser)
 	mux.HandleFunc("POST /api/login", cfg.handlerLogin)
+	mux.HandleFunc("POST /api/refresh", cfg.handlerRefresh)
+	mux.HandleFunc("POST /api/revoke", cfg.handlerRevoke)
 	server := &http.Server{
 		Addr:    ":" + port,
 		Handler: mux,

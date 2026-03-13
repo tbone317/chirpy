@@ -1,15 +1,36 @@
 package auth
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"errors"
 	"log"
-
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/alexedwards/argon2id"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
+
+func GetBearerToken(headers http.Header) (string, error) {
+	authHeader := headers.Get("Authorization")
+	if authHeader == "" {
+		return "", errors.New("authorization header missing")
+	}
+
+	parts := strings.SplitN(authHeader, " ", 2)
+	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" {
+		return "", errors.New("invalid authorization header format")
+	}
+
+	token := strings.TrimSpace(parts[1])
+	if token == "" {
+		return "", errors.New("token missing in authorization header")
+	}
+	return token, nil
+}
 
 func MakeJWT(userID uuid.UUID, tokenSecret string, expiresIn time.Duration) (string, error) {
 
@@ -67,4 +88,10 @@ func CheckPasswordHash(password, hash string) (bool, error) {
 		return false, err
 	}
 	return match, nil
+}
+
+func MakeRefreshToken() string {
+	token := make([]byte, 32)
+	rand.Read(token)
+	return hex.EncodeToString(token)
 }
