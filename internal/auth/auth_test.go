@@ -1,8 +1,79 @@
 package auth
 
 import (
+	"errors"
 	"testing"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
+
+func TestValidateJWT2(t *testing.T) {
+	const tokenSecret = "super-secret"
+	userID := uuid.New()
+
+	validToken, err := MakeJWT(userID, tokenSecret, time.Hour)
+	if err != nil {
+		t.Fatalf("MakeJWT() error = %v", err)
+	}
+
+	expiredToken, err := MakeJWT(userID, tokenSecret, -time.Minute)
+	if err != nil {
+		t.Fatalf("MakeJWT() expired token error = %v", err)
+	}
+
+	tests := []struct {
+		name       string
+		token      string
+		secret     string
+		wantUserID uuid.UUID
+		wantErr    bool
+		errIs      error
+	}{
+		{
+			name:       "Valid token",
+			token:      validToken,
+			secret:     tokenSecret,
+			wantUserID: userID,
+			wantErr:    false,
+		},
+		{
+			name:    "Expired token",
+			token:   expiredToken,
+			secret:  tokenSecret,
+			wantErr: true,
+			errIs:   jwt.ErrTokenExpired,
+		},
+		{
+			name:    "Wrong secret",
+			token:   validToken,
+			secret:  "wrong-secret",
+			wantErr: true,
+			errIs:   jwt.ErrTokenSignatureInvalid,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotUserID, err := ValidateJWT(tt.token, tt.secret)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateJWT() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if tt.wantErr {
+				if !errors.Is(err, tt.errIs) {
+					t.Fatalf("ValidateJWT() error = %v, want %v", err, tt.errIs)
+				}
+				return
+			}
+
+			if gotUserID != tt.wantUserID {
+				t.Fatalf("ValidateJWT() userID = %v, want %v", gotUserID, tt.wantUserID)
+			}
+		})
+	}
+}
 
 func TestCheckPasswordHash(t *testing.T) {
 	// First, we need to create some hashed passwords for testing
