@@ -18,13 +18,23 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Step 3 - Post a chirp (paste the "token" JWT from login response here)
-POST {{hostname}}/api/chirps
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiZTcwYjIwYTItYzFmNS00NWE2LTlhYWYtYmRiYzk3MzUyOTI0IiwiZXhwIjoxNzczNDkyMjkwLCJpYXQiOjE3NzM0ODg2OTB9.xc3NBZzbr7w5srXOSTupIchx94zxWs95tS3UjsgUBnY
+### Step 2.5 - Change the user's email and password (paste the "token" JWT from login response here)
+PUT {{hostname}}/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiYTY2OWFmNjEtMjM3Ni00MDJlLWI0ZDktY2E2ZTg0M2E2ZjllIiwiZXhwIjoxNzczNTE1NTU5LCJpYXQiOjE3NzM1MTE5NTl9.6HpN_mEKPn1gJNqTO26TWzn0QaS9JG3os99uRVBuYzM
 Content-Type: application/json
 
 {
-  "body": "Just learning the system"
+  "email": "another@test.com",
+  "password": "newpassword"
+}
+
+### Step 3 - Post a chirp (paste the "token" JWT from login response here)
+POST {{hostname}}/api/chirps
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiYjhjZDAxNGUtZjhmOS00M2VjLTkxODctMmFmZWM2YzNlZDg3IiwiZXhwIjoxNzczNTE0NzgzLCJpYXQiOjE3NzM1MTExODN9.klgt0polbQ3Zp8RzyUADiRyK3fKG2pu-VucR4NJnt_g
+Content-Type: application/json
+
+{
+  "body": "Vibe coding and trying to learn"
 }
 
 ### Step 4 - Get a new access token (paste the "refresh_token" here)

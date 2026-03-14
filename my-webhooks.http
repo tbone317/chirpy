@@ -1,0 +1,12 @@
+@hostname = http://localhost:8080
+
+### Test the Polka webhooks endpoint
+POST {{hostname}}/api/polka/webhooks
+Content-Type: application/json
+
+{
+  "event": "foobar",
+  "data": {
+    "user_id": "Hello"
+  }
+}
