@@ -1,0 +1,39 @@
+@hostname = http://localhost:8080
+
+### Step 1 - Create a user
+POST {{hostname}}/api/users
+Content-Type: application/json
+
+{
+  "email": "tervis@test.com",
+  "password": "123456"
+}
+
+### Step 2 - Login (grab token and refresh_token from the response)
+POST {{hostname}}/api/login
+Content-Type: application/json
+
+{
+  "email": "tervis@test.com",
+  "password": "123456"
+}
+
+### Step 3 - Post a chirp (paste the "token" JWT from login response here)
+POST {{hostname}}/api/chirps
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiZTcwYjIwYTItYzFmNS00NWE2LTlhYWYtYmRiYzk3MzUyOTI0IiwiZXhwIjoxNzczNDkyMjkwLCJpYXQiOjE3NzM0ODg2OTB9.xc3NBZzbr7w5srXOSTupIchx94zxWs95tS3UjsgUBnY
+Content-Type: application/json
+
+{
+  "body": "Just learning the system"
+}
+
+### Step 4 - Get a new access token (paste the "refresh_token" here)
+POST {{hostname}}/api/refresh
+Authorization: Bearer d033d161faddb8b9f12ffe4193705510c33c342a5965978958e85a9e816965e6
+
+### Step 5 - Revoke the refresh token
+POST {{hostname}}/api/revoke
+Authorization: Bearer d033d161faddb8b9f12ffe4193705510c33c342a5965978958e85a9e816965e6
+
+### 
+GET {{hostname}}/api/chirps

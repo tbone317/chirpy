@@ -6,13 +6,21 @@ get {{hostname}}/api/chirps/7f042df3-8f5a-48fb-9e8c-0b71ba8e3474
 ### Get all chirps
 get {{hostname}}/api/chirps
 
+### Post with authorzation header
+post {{hostname}}/api/chirps
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiYzQxNjg1Y2YtZjllNi00ODUwLWJhNDItMWU2OGQ2OTQ2YzVkIiwiZXhwIjoxNzczNDQyODkwLCJpYXQiOjE3NzM0MzkyOTB9.7NpmPUpAxAcMBZCmbMvv2osXAwLZh4TDSk0gLTP-rKQ
+Content-Type: application/json
+{
+  "body": "Hello, Chirpy! keRfuffle sharbert fornax"
+}
+
 ### Login with valid credentials
 post {{hostname}}/api/login
 Content-Type: application/json  
 
 {
-  "email": "travis.dunbar@gmail.com",
-  "password": "password123"
+  "email": "saul@bettercall.com",
+  "password": "123456"
 }
 
 ### Test add user
