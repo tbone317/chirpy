@@ -10,3 +10,38 @@ Content-Type: application/json
     "user_id": "Hello"
   }
 }
+
+### Test webhooks endpoint with valid API key and event
+POST {{hostname}}/api/polka/webhooks
+Authorization: apikey f271c81ff7084ee5b99a5091b42d486e
+Content-Type: application/json
+
+{
+  "event": "user.upgraded",
+  "data": {
+    "user_id": "7da364d0-2475-4cfa-8920-f6d968a31848"
+  }
+}
+
+### Test webhooks endpoint with valid API key and unknown event
+POST {{hostname}}/api/polka/webhooks
+Authorization: apikey f271c81ff7084ee5b99a5091b42d486e
+Content-Type: application/json
+
+{
+  "event": "unknown.event",
+  "data": {
+    "user_id": "7da364d0-2475-4cfa-8920-f6d968a31848"
+  }
+}
+
+### Test webhooks endpoint with missing API key
+POST {{hostname}}/api/polka/webhooks
+Content-Type: application/json  
+
+{
+  "event": "user.upgraded",
+  "data": {
+    "user_id": "7da364d0-2475-4cfa-8920-f6d968a31848"
+  }
+}

@@ -19,6 +19,7 @@ type apiConfig struct {
 	db             *database.Queries
 	platform       string
 	secretKey      string
+	polkaKey       string
 }
 
 type User struct {
@@ -37,6 +38,10 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
+	}
+	polkaKey := os.Getenv("POLKA_KEY")
+	if polkaKey == "" {
+		log.Fatal("POLKA_KEY environment variable is not set")
 	}
 	platform := os.Getenv("PLATFORM")
 	if platform == "" {
@@ -62,6 +67,7 @@ func main() {
 		db:             database.New(dbConn),
 		platform:       platform,
 		secretKey:      secretKey,
+		polkaKey:       polkaKey,
 	}
 
 	mux := http.NewServeMux()
