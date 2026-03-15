@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -93,13 +94,50 @@ func (cfg *apiConfig) handlerChirpsGetByID(w http.ResponseWriter, r *http.Reques
 	respondWithJSON(w, http.StatusOK, response)
 }
 
-func (cfg *apiConfig) handlerChirpsList(w http.ResponseWriter, r *http.Request) {
-	chirps, err := cfg.db.GetChirps(r.Context())
+func authorIDFromRequest(r *http.Request) (uuid.UUID, error) {
+	query := r.URL.Query()
+	userIDStr := query.Get("author_id")
+	userID, err := uuid.Parse(userIDStr)
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "Couldn't get chirps", err)
-		return
+		return uuid.Nil, errors.New("Invalid author_id")
 	}
+	return userID, nil
+}
 
+func getSortDirectionFromRequest(r *http.Request) string {
+	query := r.URL.Query()
+	sort := query.Get("sort")
+	if sort == "desc" {
+		return "desc"
+	}
+	return "asc"
+}
+
+func (cfg *apiConfig) handlerChirpsList(w http.ResponseWriter, r *http.Request) {
+	chirps := []database.Chirp{}
+
+	userID, err := authorIDFromRequest(r)
+	if err != nil {
+		chirps, err = cfg.db.GetChirps(r.Context())
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't get chirps", err)
+			return
+		}
+	} else {
+		chirps, err = cfg.db.GetChirpsByUserID(r.Context(), userID)
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "Couldn't get chirps", err)
+			return
+		}
+	}
+	order := getSortDirectionFromRequest(r)
+	if order == "desc" {
+		// Reverse the slice for descending order
+		sort.Slice(chirps, func(i, j int) bool {
+			return chirps[i].CreatedAt.After(chirps[j].CreatedAt)
+		})
+	}
+	//log.Printf("Listing chirps for user ID: %s", userID)
 	response := make([]Chirp, len(chirps))
 	for i, c := range chirps {
 		response[i] = Chirp{

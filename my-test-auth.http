@@ -5,7 +5,7 @@ POST {{hostname}}/api/users
 Content-Type: application/json
 
 {
-  "email": "tervis@test.com",
+  "email": "renee@test.com",
   "password": "123456"
 }
 
@@ -14,13 +14,13 @@ POST {{hostname}}/api/login
 Content-Type: application/json
 
 {
-  "email": "tervis@test.com",
+  "email": "renee@test.com",
   "password": "123456"
 }
 
 ### Step 2.5 - Change the user's email and password (paste the "token" JWT from login response here)
 PUT {{hostname}}/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiYTY2OWFmNjEtMjM3Ni00MDJlLWI0ZDktY2E2ZTg0M2E2ZjllIiwiZXhwIjoxNzczNTE1NTU5LCJpYXQiOjE3NzM1MTE5NTl9.6HpN_mEKPn1gJNqTO26TWzn0QaS9JG3os99uRVBuYzM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiNTRiMmZiY2ItZThhZi00MTk2LTg3ZDItMTYyNmQ3YTI2NzVhIiwiZXhwIjoxNzczNjExOTgwLCJpYXQiOjE3NzM2MDgzODB9.pVNlK9ERh4dKlQAx9cXevAeeR66oKDbfDl-FfRbNmfU
 Content-Type: application/json
 
 {
@@ -30,11 +30,11 @@ Content-Type: application/json
 
 ### Step 3 - Post a chirp (paste the "token" JWT from login response here)
 POST {{hostname}}/api/chirps
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiYjhjZDAxNGUtZjhmOS00M2VjLTkxODctMmFmZWM2YzNlZDg3IiwiZXhwIjoxNzczNTE0NzgzLCJpYXQiOjE3NzM1MTExODN9.klgt0polbQ3Zp8RzyUADiRyK3fKG2pu-VucR4NJnt_g
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjaGlycHktYWNjZXNzIiwic3ViIjoiY2Y2ZGVlM2YtOTQ1MS00N2I5LWJjMDItZGVjNWE5OTZhNjNlIiwiZXhwIjoxNzczNjEyMjM3LCJpYXQiOjE3NzM2MDg2Mzd9.hVvbg4V68b1bQhnJWH5w1fU_BAvhghgOzfKGPmYlnVw
 Content-Type: application/json
 
 {
-  "body": "Vibe coding and trying to learn"
+  "body": "Another chirp from Renee!"
 }
 
 ### Step 4 - Get a new access token (paste the "refresh_token" here)
@@ -47,3 +47,9 @@ Authorization: Bearer d033d161faddb8b9f12ffe4193705510c33c342a5965978958e85a9e81
 
 ### 
 GET {{hostname}}/api/chirps
+
+### get chirps in descending order
+GET {{hostname}}/api/chirps?sort=desc
+
+###
+GET {{hostname}}/api/chirps?author_id=cf6dee3f-9451-47b9-bc02-dec5a996a63e&sort=desc
