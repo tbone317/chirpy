@@ -1,6 +1,6 @@
 @hostname = http://localhost:8080
 
-### Step 1 - Create a user
+### Step 1 - Create a user. 
 POST {{hostname}}/api/users
 Content-Type: application/json
 
